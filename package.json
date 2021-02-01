@@ -1,0 +1,23 @@
+{
+  "name": "editoro",
+  "version": "1.0.0",
+  "description": "Open source rich text editor",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HKaghazi/editoro.git"
+  },
+  "keywords": [
+    "text-editor",
+    "markup"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HKaghazi/editoro/issues"
+  },
+  "homepage": "https://github.com/HKaghazi/editoro#readme"
+}
