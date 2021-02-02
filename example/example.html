@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Editoro</title>
+    <link rel="stylesheet" href="editoro.css">
+  </head>
+  <body>
+    <div style="max-width: 800px; margin-right: auto; margin-left: auto; margin-top: 200px; background-color: #f3f3f3">
+      <div class="editoro">hello guys</div>
+    </div>
+
+    <script src="../dist/editoro.js"></script>
+
+    <script>
+      var editoro = new Editoro.default({
+        data: {
+          time: "",
+          blocks: [
+            {
+              type: "paragraph",
+              text: "Hello guys",
+            },
+            {
+              type: "paragraph",
+              text: "Hello guys alkdl dla ksdlajs",
+            },
+          ],
+        },
+      });
+    </script>
+  </body>
+</html>

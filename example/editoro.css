@@ -1,0 +1,19 @@
+
+
+.editoro {
+
+}
+
+
+.editoro-block {
+  transition: all .3s ease-out;
+  padding: 8px 36px 8px 12px;
+}
+
+.editoro-block-focus {
+  background-color: #c0c0c093;
+}
+
+.editoro-block:hover {
+  background-color: #c0c0c093;
+}
