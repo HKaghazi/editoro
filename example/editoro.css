@@ -1,19 +1,71 @@
-
-
 .editoro {
-
+  background-color: white;
+  position: relative;
 }
-
 
 .editoro-block {
-  transition: all .3s ease-out;
+  position: relative;
+  transition: all 0.3s ease-out;
   padding: 8px 36px 8px 12px;
+  border-radius: 8px;
 }
 
-.editoro-block-focus {
-  background-color: #c0c0c093;
+.editoro-block:after {
+  content: "";
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  background-image: url(./drag.svg);
+  background-size: 16px 16px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-out;
+  position: absolute;
+  opacity: 0;
+  right: 0px;
+  top: 0px;
+  cursor: move;
+}
+.editoro-block:hover:after {
+  opacity: 1;
 }
 
-.editoro-block:hover {
-  background-color: #c0c0c093;
+.editoro-block:focus:after {
+  opacity: 1;
+}
+
+.editoro-block:focus {
+  outline: none;
+  background-color: azure;
+}
+
+/* .editoro-blocks-container {
+
+} */
+
+.editoro-toolbar {
+  display: block;
+  position: absolute;
+  width: 100%;
+  min-height: 40px;
+  background-color: gainsboro;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.editoro-toolbar.show {
+  display: block;
+}
+
+.editoro-toolbar.hide {
+  display: none;
+}
+
+.editoro-toolbar-sub {
+  display: block;
+}
+.editoro-toolbar-item-icon {
+  width: 16px;
+  height: 16px;
 }

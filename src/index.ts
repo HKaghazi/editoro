@@ -1,5 +1,7 @@
-// import './style/style.css';
-
+import { Block } from "./block";
+import { BlockManager } from "./blockManager";
+import { BlockUtility } from "./blockUtility";
+import { Toolbar } from "./toolbar";
 export default class Editoro {
   public core;
 
@@ -12,9 +14,10 @@ export default class Editoro {
 
 class Core {
   private _holder = "editoro";
-  private _blockClassName = "editoro-block";
-  private _topWhiteSpace = "32px";
-  private _bottomWhiteSpace = "100px";
+  private _topWhiteSpace = "0px";
+  private _bottomWhiteSpace = "50px";
+  private _editMode = true;
+  private _css_container = "editoro-container";
 
   constructor(config?: EditoroConfig) {
     this._holder = config?.holder ?? "editoro";
@@ -25,96 +28,53 @@ class Core {
     const allEditors = document.getElementsByClassName(this._holder) as HTMLCollectionOf<HTMLElement>;
 
     for (let i = 0; i < allEditors.length; i++) {
-      const editor = allEditors.item(i);
-
-      // editor container style
-      editor.style.paddingTop = this._topWhiteSpace;
-      editor.style.paddingBottom = this._bottomWhiteSpace;
-
-      // clear editor container
+      const editor = allEditors.item(i) as HTMLDivElement;
       editor.innerHTML = "";
+      const blockContainer = document.createElement("div");
+      blockContainer.innerText = 'Hello world';
+      blockContainer.classList.add(this._css_container);
+      blockContainer.style.paddingTop = this._topWhiteSpace;
+      blockContainer.style.paddingBottom = this._bottomWhiteSpace;
+      blockContainer.contentEditable = "true";
+      editor.appendChild(blockContainer);
+
+      // toolbar
+      const toolbar = new Toolbar(editor);
+
+      // block manager
+      const blockMgr = new BlockManager(editor, blockContainer, toolbar);
 
       // set data if exists
       if (config?.data) {
-        this.creteNewBlock(editor, config.data);
+        const blocks = BlockUtility.jsonToHTMLElement(config?.data);
+        blockContainer.innerHTML = '';
+        blockMgr.insertBlocks(blocks);
       }
 
       // interceptors
-      this.interceptors(editor);
+      // this.interceptors(editor);
 
       // change event listiner
-      this.onChnage(editor);
-
-      editor.setAttribute("contentEditable", "true");
+      // this.onChnage(editor);
+      // editor.setAttribute("contentEditable", "true");
     }
   }
 
-  creteNewBlock(editor: Element, data?: string | HTMLElement | object) {
-    // type: string
-    if (typeof data === "string") {
-      editor.innerHTML = data;
-    }
+  // interceptors(editor: HTMLElement) {
+  //   // prevent paste any things
+  //   editor.addEventListener("paste", function (e: any) {
+  //     e.preventDefault();
+  //     var text = (e.originalEvent || e).clipboardData.getData("text/plain");
+  //     document.execCommand("insertHTML", false, text);
+  //   });
+  // }
 
-    // type: htmlElement
-    if (data instanceof HTMLElement) {
-      editor.appendChild(data);
-    }
-
-    // object
-    if (typeof data === "object") {
-      this.jsonToHTMLElement(data).forEach((el) => {
-        el.addEventListener("focus", () => {
-          console.log(typeof el);
-          el.classList.add("editoro-block-focus");
-        });
-        editor.append(el);
-      });
-    }
-  }
-
-  interceptors(editor: Element) {
-    // prevent paste any things
-    editor.addEventListener("paste", function (e: any) {
-      e.preventDefault();
-      var text = (e.originalEvent || e).clipboardData.getData("text/plain");
-      document.execCommand("insertHTML", false, text);
-    });
-  }
-
-  onChnage(editor: Element) {
-    // on change
-    editor.addEventListener("input", (e) => {
-      console.log(e.target);
-    });
-  }
-
-  jsonToHTMLElement(data: any): Array<HTMLElement> {
-    let elements: Array<HTMLElement> = [];
-
-    (data?.blocks as any[]).forEach((block) => {
-      if (block?.text) {
-        switch (block?.type) {
-          // paragraph
-          case "paragraph":
-            let p_el = document.createElement("div");
-            p_el.className = this._blockClassName;
-            p_el.innerText = block?.text;
-            elements.push(p_el);
-            break;
-
-          // default create paragraph
-          default:
-            let d_el = document.createElement("div");
-            d_el.className = this._blockClassName;
-            d_el.innerText = block?.text;
-            elements.push(p_el);
-            break;
-        }
-      }
-    });
-
-    return elements;
-  }
+  // onChnage(editor: HTMLElement) {
+  //   // on change
+  //   editor.addEventListener("input", (e) => {
+  //     // console.log(e.target);
+  //   });
+  // }
 }
 
 interface EditoroConfig {
