@@ -10,27 +10,7 @@
   border-radius: 8px;
 }
 
-.editoro-block:after {
-  content: "";
-  width: 24px;
-  height: 24px;
-  padding: 4px;
-  background-image: url(./drag.svg);
-  background-size: 16px 16px;
-  background-position: center center;
-  background-repeat: no-repeat;
-  transition: all 0.3s ease-out;
-  position: absolute;
-  opacity: 0;
-  right: 0px;
-  top: 0px;
-  cursor: move;
-}
 .editoro-block:hover:after {
-  opacity: 1;
-}
-
-.editoro-block:focus:after {
   opacity: 1;
 }
 
@@ -70,7 +50,6 @@
   height: 16px;
 }
 
-
 .editoro-ul {
   padding-left: 30px;
 }
@@ -78,6 +57,33 @@
   max-width: 100%;
 }
 
-.editoro-image div{
+.editoro-image div {
   height: 200px;
+}
+
+.editoro-block:hover .editoro-block-move {
+  display: block;
+}
+
+.editoro-block-move {
+  display: none;
+  position: absolute;
+  width: 32px;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.editoro-block-move:after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  background-image: url(./drag.svg);
+  background-size: 16px 16px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: all 0.3s ease-out;
+  cursor: move;
 }

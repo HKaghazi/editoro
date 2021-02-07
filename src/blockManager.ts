@@ -1,13 +1,13 @@
-import Editoro from ".";
-import { Block } from "./block";
-import { Toolbar } from "./toolbar";
+import Editoro from '.';
+import { Block } from './block';
+import { Toolbar } from './toolbar';
 
 export class BlockManager {
-  private _blockClassName = "editoro-block";
-  private _css_paragraph = "editoro-paragraph";
-  private _css_unorderedlist = "editoro-ul";
-  private _css_image = "editoro-image";
-  private _css_block_container = "editoro-blocks-container";
+  private _blockClassName = 'editoro-block';
+  private _css_paragraph = 'editoro-paragraph';
+  private _css_unorderedlist = 'editoro-ul';
+  private _css_image = 'editoro-image';
+  private _css_block_container = 'editoro-blocks-container';
   private editor: HTMLDivElement;
   private blockContainer: HTMLDivElement;
   private toolbar: Toolbar;
@@ -31,31 +31,31 @@ export class BlockManager {
 
   // create block in DOM
   private createBlock(block: Block, refNode?: HTMLElement): HTMLElement {
-    const shouldBeDiv = ["img"];
-    let el = document.createElement(shouldBeDiv.includes(block.type) ? "div" : block.type);
+    const shouldBeDiv = ['img'];
+    let el = document.createElement(shouldBeDiv.includes(block.type) ? 'div' : block.type);
     el.classList.add(this._blockClassName);
-    el.setAttribute("contentEditable", "true");
+    el.setAttribute('contentEditable', 'true');
     // console.log(block);
     // block content
     switch (block.type) {
-      case "p":
+      case 'p':
         el.classList.add(this._css_paragraph);
         el.innerText = block.data.text;
         break;
 
-      case "ul":
+      case 'ul':
         el.classList.add(this._css_unorderedlist);
         block.data.options.forEach((opt) => {
-          const op = document.createElement("li");
+          const op = document.createElement('li');
           op.innerText = opt;
           el.appendChild(op);
         });
         break;
 
-      case "img":
+      case 'img':
         el.contentEditable = 'false';
         el.classList.add(this._css_image);
-        const im = document.createElement("div");
+        const im = document.createElement('div');
         im.style.backgroundImage = `url(${block.data.value})`;
         el.appendChild(im);
         break;
@@ -66,6 +66,12 @@ export class BlockManager {
         break;
     }
 
+    // mover
+    const mv = document.createElement('div');
+    mv.classList.add('editoro-block-move');
+    mv.contentEditable = 'false';
+    el.appendChild(mv);
+
     // this.addEventToBlock(el, block.type);
     if (refNode) {
       this.blockContainer.insertBefore(el, refNode.nextSibling);
@@ -74,8 +80,8 @@ export class BlockManager {
     }
 
     // empty block
-    if (block.type == "img") {
-      let eb = document.createElement("div");
+    if (block.type == 'img') {
+      let eb = document.createElement('div');
       eb.classList.add(this._blockClassName);
       eb.classList.add(this._css_paragraph);
       if (refNode) {
@@ -88,20 +94,20 @@ export class BlockManager {
   }
 
   private containerEvents() {
-    this.blockContainer.addEventListener("DOMNodeInserted", (e) => {
+    this.blockContainer.addEventListener('DOMNodeInserted', (e) => {
       // console.log(e);
       // this.editorInsertBlockEvent;
     });
 
     // this.editorInsertBlockEvent();
 
-    ["focus", "click", "keydown"].forEach((evKey) => {
+    ['focus', 'click', 'keydown'].forEach((evKey) => {
       this.blockContainer.addEventListener(evKey, () => {
         this.getCurretnBlockFromCaretPosition();
       });
     });
 
-    this.blockContainer.addEventListener("blur", () => {
+    this.blockContainer.addEventListener('blur', () => {
       this.toolbar.hide();
     });
   }
@@ -131,13 +137,13 @@ export class BlockManager {
   private onEnterKeyPressed(e: KeyboardEvent, el: HTMLElement, blockType: string) {
     const selection = document.getSelection();
 
-    let textNeedBreak = "";
-    if (selection.type == "Caret") {
+    let textNeedBreak = '';
+    if (selection.type == 'Caret') {
       textNeedBreak = el.innerText.substring(selection.focusOffset);
       el.innerText = el.innerText.substring(0, selection.focusOffset);
     }
 
-    if (selection.type == "Range") {
+    if (selection.type == 'Range') {
       if (selection.focusOffset > selection.anchorOffset) {
         textNeedBreak = el.innerText.substring(selection.focusOffset);
         // clear selected range
@@ -149,7 +155,7 @@ export class BlockManager {
       }
     }
 
-    this.createBlock(new Block("p", { text: textNeedBreak, value: "" }), el).focus();
+    this.createBlock(new Block('p', { text: textNeedBreak, value: '' }), el).focus();
     e.preventDefault();
   }
 
@@ -158,12 +164,12 @@ export class BlockManager {
 
     // this.createBlock(new Block("p", { text: textNeedBreak, value: "" }), el).focus();
     // e.preventDefault();
-    let currentElementText = "";
+    let currentElementText = '';
     if (selection.anchorOffset === 0) {
-      currentElementText = el.textContent ?? "";
+      currentElementText = el.textContent ?? '';
       // el.previousElementSibling.innerHTML += " " + currentElementText;
       (el.previousElementSibling as HTMLElement).focus();
-      document.execCommand("insertText", true, " " + currentElementText);
+      document.execCommand('insertText', true, ' ' + currentElementText);
       el.remove();
       e.preventDefault();
     }
@@ -172,10 +178,10 @@ export class BlockManager {
   private onDeleteKeyPressed(e: KeyboardEvent, el: HTMLElement, blockType: string) {
     const selection = document.getSelection();
 
-    let nextSiblingText = "";
+    let nextSiblingText = '';
     if (selection.anchorOffset === el.textContent.length) {
-      nextSiblingText = el.nextSibling?.textContent ?? "";
-      document.execCommand("insertText", true, " " + nextSiblingText);
+      nextSiblingText = el.nextSibling?.textContent ?? '';
+      document.execCommand('insertText', true, ' ' + nextSiblingText);
       el.nextSibling?.remove();
       e.preventDefault();
     }
@@ -184,7 +190,7 @@ export class BlockManager {
   }
 
   private getNextSiblingType(el: HTMLElement): string {
-    let type = "paragraph";
+    let type = 'paragraph';
     console.log(el.nodeType);
     return type;
   }
