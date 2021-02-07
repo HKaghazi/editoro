@@ -11,22 +11,29 @@ export class BlockUtility {
     let elements: Array<Block> = [];
 
     (data?.blocks as any[]).forEach((block) => {
-      if (block?.text) {
-        switch (block?.type) {
-          // paragraph
-          case "paragraph":
-            elements.push(new Block("p", { text: block?.text, value: "" }));
-            break;
+      switch (block?.type) {
+        // paragraph
+        case "paragraph":
+          elements.push(new Block("p", { text: block?.text }));
+          break;
 
-          // default create paragraph
-          default:
-            elements.push(new Block("p", { text: block?.text, value: "" }));
-            break;
-        }
+        // unordered list
+        case "list":
+          elements.push(new Block("ul", { text: block?.text, options: block?.options }));
+          break;
+
+        // image
+        case "image":
+          elements.push(new Block("img", { text: block?.text, value: block?.value }));
+          break;
+
+        // default create paragraph
+        default:
+          elements.push(new Block("p", { text: block?.text }));
+          break;
       }
     });
 
     return elements;
   }
-  
 }

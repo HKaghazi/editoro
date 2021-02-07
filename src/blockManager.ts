@@ -5,6 +5,8 @@ import { Toolbar } from "./toolbar";
 export class BlockManager {
   private _blockClassName = "editoro-block";
   private _css_paragraph = "editoro-paragraph";
+  private _css_unorderedlist = "editoro-ul";
+  private _css_image = "editoro-image";
   private _css_block_container = "editoro-blocks-container";
   private editor: HTMLDivElement;
   private blockContainer: HTMLDivElement;
@@ -29,87 +31,102 @@ export class BlockManager {
 
   // create block in DOM
   private createBlock(block: Block, refNode?: HTMLElement): HTMLElement {
-    let el = document.createElement(block.type);
-    el.innerText = block.data.text;
+    const shouldBeDiv = ["img"];
+    let el = document.createElement(shouldBeDiv.includes(block.type) ? "div" : block.type);
     el.classList.add(this._blockClassName);
     el.setAttribute("contentEditable", "true");
+    // console.log(block);
+    // block content
     switch (block.type) {
       case "p":
         el.classList.add(this._css_paragraph);
+        el.innerText = block.data.text;
+        break;
+
+      case "ul":
+        el.classList.add(this._css_unorderedlist);
+        block.data.options.forEach((opt) => {
+          const op = document.createElement("li");
+          op.innerText = opt;
+          el.appendChild(op);
+        });
+        break;
+
+      case "img":
+        el.contentEditable = 'false';
+        el.classList.add(this._css_image);
+        const im = document.createElement("div");
+        im.style.backgroundImage = `url(${block.data.value})`;
+        el.appendChild(im);
         break;
 
       default:
         el.classList.add(this._css_paragraph);
+        el.innerText = block.data.text;
         break;
     }
-    this.addEventToBlock(el, block.type);
+
+    // this.addEventToBlock(el, block.type);
     if (refNode) {
       this.blockContainer.insertBefore(el, refNode.nextSibling);
     } else {
       this.blockContainer.appendChild(el);
     }
+
+    // empty block
+    if (block.type == "img") {
+      let eb = document.createElement("div");
+      eb.classList.add(this._blockClassName);
+      eb.classList.add(this._css_paragraph);
+      if (refNode) {
+        this.blockContainer.insertBefore(eb, refNode.nextSibling);
+      } else {
+        this.blockContainer.appendChild(eb);
+      }
+    }
     return el;
   }
 
   private containerEvents() {
-    this.blockContainer.addEventListener("focus", (e) => {
-      // console.log(this.getFocusedNote(e));
-      this.toolbar.show();
-    });
-    this.blockContainer.addEventListener("blur", () => {
-      // el.classList.add("editoro-block-focus");
-      this.toolbar.hide();
-    });
-    this.blockContainer.addEventListener("click", (e) => {
-      let tg = <HTMLDivElement>e.target;
-      let selectedBlock: HTMLElement;
-
-      if (tg.classList.contains("editoro-block")) {
-        selectedBlock = tg;
-      } else {
-        const selection = document.getSelection();
-        selectedBlock = selection.getRangeAt(0).commonAncestorContainer.parentNode as HTMLElement;
-      }
-      
-      console.log(selectedBlock);
-    });
-  }
-
-  // add events to blocks
-  private addEventToBlock(el: HTMLElement, blockType: string) {
-    // on focus block
-    el.addEventListener("focus", () => {
-      el.classList.add("editoro-block-focus");
-      this.toolbar.show();
-    });
-
-    // on blur focus
-    el.addEventListener("blur", () => {
-      el.classList.remove("editoro-block-focus");
-      this.toolbar.hide();
-    });
-
-    // on block key down
-    el.addEventListener("keydown", (e) => {
+    this.blockContainer.addEventListener("DOMNodeInserted", (e) => {
       // console.log(e);
-      switch (e.code) {
-        case "Enter":
-          this.onEnterKeyPressed(e, el, blockType);
-          break;
+      // this.editorInsertBlockEvent;
+    });
 
-        case "Backspace":
-          this.onBackSpaceKeyPressed(e, el, blockType);
-          break;
+    // this.editorInsertBlockEvent();
 
-        case "Delete":
-          this.onDeleteKeyPressed(e, el, blockType);
-          break;
+    ["focus", "click", "keydown"].forEach((evKey) => {
+      this.blockContainer.addEventListener(evKey, () => {
+        this.getCurretnBlockFromCaretPosition();
+      });
+    });
 
-        default:
-          break;
-      }
+    this.blockContainer.addEventListener("blur", () => {
+      this.toolbar.hide();
     });
   }
+
+  getCurretnBlockFromCaretPosition() {
+    const selection = document.getSelection();
+    let selectedItem;
+
+    setTimeout(() => {
+      if (selection) {
+        selectedItem = selection.anchorNode?.nodeName;
+        // const type = this.editorInsertBlockEvent(selection.anchorNode);
+        // console.log(type);
+        this.toolbar.show();
+      }
+    }, 50);
+  }
+
+  // editorInsertBlockEvent(el: Node) {
+  //   let x = el?.parentElement;
+  //   while(el?.nodeName != undefined){
+  //     console.log(x);
+  //     x = x?.parentElement;
+  //   };
+  // }
 
   private onEnterKeyPressed(e: KeyboardEvent, el: HTMLElement, blockType: string) {
     const selection = document.getSelection();

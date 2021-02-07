@@ -6,22 +6,25 @@ export class Toolbar {
   private toolbar: HTMLDivElement;
 
   private tools = [
-    { type: "button", name: "file", tooltip: "file", command: "file", icon: "./drag.svg" },
+    { type: "button", name: "bold", tooltip: "bold", command: "bold", icon: "./icons/svg/004-bold.svg" },
+    { type: "button", name: "italic", tooltip: "italic", command: "italic", icon: "./icons/svg/031-italic.svg" },
     {
       type: "group",
+      name: "heading",
       icon: "./icons/svg/027-font.svg",
       tools: [
-        { type: "button", name: "p", tooltip: "paragraph", command: "p", icon: "./drag.svg" },
-        { type: "button", name: "H1", tooltip: "heading 1", command: "h1", icon: "./drag.svg" },
-        { type: "button", name: "H2", tooltip: "heading 2", command: "h2", icon: "./drag.svg" },
-        { type: "button", name: "H3", tooltip: "heading 3", command: "h3", icon: "./drag.svg" },
-        { type: "button", name: "H4", tooltip: "heading 4", command: "h4", icon: "./drag.svg" },
-        { type: "button", name: "H5", tooltip: "heading 5", command: "h5", icon: "./drag.svg" },
-        { type: "button", name: "H6", tooltip: "heading 6", command: "h6", icon: "./drag.svg" },
-        { type: "button", name: "pre", tooltip: "pre", command: "pre", icon: "./drag.svg" },
+        { type: "button", name: "p", tooltip: "paragraph", command: "p", icon: "./icons/svg/043-paragraph.svg" },
+        { type: "button", name: "H1", tooltip: "heading 1", command: "h1", icon: undefined },
+        { type: "button", name: "H2", tooltip: "heading 2", command: "h2", icon: undefined },
+        { type: "button", name: "H3", tooltip: "heading 3", command: "h3", icon: undefined },
+        { type: "button", name: "H4", tooltip: "heading 4", command: "h4", icon: undefined },
+        { type: "button", name: "H5", tooltip: "heading 5", command: "h5", icon: undefined },
+        { type: "button", name: "H6", tooltip: "heading 6", command: "h6", icon: undefined },
+        { type: "button", name: "pre", tooltip: "pre", command: "pre", icon: "./icons/svg/009-code.svg" },
       ],
     },
-    { type: "button", name: "img", tooltip: "img", command: "file", icon: "./drag.svg" },
+    { type: "button", name: "img", tooltip: "img", command: "file", icon: "./icons/svg/007-calendar.svg" },
+    { type: "button", name: "file", tooltip: "file", command: "file", icon: "./icons/svg/042-paperclip.svg" },
   ];
 
   constructor(editor: HTMLDivElement) {
@@ -50,12 +53,15 @@ export class Toolbar {
       if (tool.type == "button") {
         let el = document.createElement("button");
         el.classList.add("editoro-toolbar-item");
-        el.innerHTML = `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>`;
+        el.innerHTML = tool.icon ? `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>` : tool.name;
+        el.addEventListener("click", () => {
+          this.runCommand(tool.command);
+        });
         this.toolbar.appendChild(el);
       } else {
         let el = document.createElement("button");
         el.classList.add("editoro-toolbar-item");
-        el.innerHTML = `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>`;
+        el.innerHTML = tool.icon ? `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>` : tool.name;
         this.toolbar.appendChild(el);
         // submenu
         let sub = document.createElement("div");
@@ -63,7 +69,10 @@ export class Toolbar {
         tool.tools.forEach((tool) => {
           let el = document.createElement("button");
           el.classList.add("editoro-toolbar-item");
-          el.innerHTML = `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>`;
+          el.innerHTML = tool.icon ? `<img class='editoro-toolbar-item-icon' src='${tool.icon}'/>` : tool.name;
+          el.addEventListener("click", () => {
+            this.runCommand(tool.command);
+          });
           sub.appendChild(el);
         });
         sub.style.display = "none";
@@ -77,10 +86,10 @@ export class Toolbar {
         this.toolbar.appendChild(sub);
       }
     });
-    // h1.addEventListener("click", () => {
-    //   document.execCommand("formatBlock", false, "h1");
-    //   console.log("h1 clicked");
-    // });
+  }
+
+  runCommand(cmd: string) {
+    this.executeCommand(cmd);
   }
 
   /**
@@ -101,6 +110,7 @@ export class Toolbar {
    * @param command string from triggerCommand
    */
   executeCommand(command: string) {
+    console.log(command);
     const commands = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "pre"];
     if (commands.includes(command)) {
       document.execCommand("formatBlock", false, command);

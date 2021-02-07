@@ -15,7 +15,7 @@ export default class Editoro {
 class Core {
   private _holder = "editoro";
   private _topWhiteSpace = "0px";
-  private _bottomWhiteSpace = "50px";
+  private _bottomWhiteSpace = "100px";
   private _editMode = true;
   private _css_container = "editoro-container";
 

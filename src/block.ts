@@ -1,15 +1,17 @@
 export class Block {
   public type: string;
   public data: {
-    text: string;
-    value: string;
+    text?: string;
+    value?: string;
+    options?: string[];
   };
 
   constructor(
     type: string,
     data: {
-      text: string;
-      value: string;
+      text?: string;
+      value?: string;
+      options?: string[];
     }
   ) {
     this.type = type;

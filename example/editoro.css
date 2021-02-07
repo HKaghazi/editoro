@@ -44,7 +44,7 @@
 } */
 
 .editoro-toolbar {
-  display: block;
+  display: none;
   position: absolute;
   width: 100%;
   min-height: 40px;
@@ -68,4 +68,16 @@
 .editoro-toolbar-item-icon {
   width: 16px;
   height: 16px;
+}
+
+
+.editoro-ul {
+  padding-left: 30px;
+}
+.editoro-image {
+  max-width: 100%;
+}
+
+.editoro-image div{
+  height: 200px;
 }

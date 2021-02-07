@@ -4,11 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Example Editoro</title>
-    <link rel="stylesheet" href="editoro.css">
+    <link rel="stylesheet" href="editoro.css" />
   </head>
   <body>
     <div style="max-width: 800px; margin-right: auto; margin-left: auto; margin-top: 200px; background-color: #f3f3f3">
       <div class="editoro">hello guys</div>
+
+      <button>Hello guys</button>
     </div>
 
     <script src="../dist/editoro.js"></script>
@@ -26,6 +28,15 @@
               type: "paragraph",
               text: "Hello guys alkdl dla ksdlajs",
             },
+            {
+              type: "list",
+              options: ["option 1", "option 2", "option 3"],
+            },
+            {
+              type: "image",
+              text: "image description",
+              value: './img.jpg'
+            }
           ],
         },
       });
