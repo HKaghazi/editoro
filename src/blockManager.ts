@@ -35,6 +35,9 @@ export class BlockManager {
     let el = document.createElement(shouldBeDiv.includes(block.type) ? 'div' : block.type);
     el.classList.add(this._blockClassName);
     el.setAttribute('contentEditable', 'true');
+    el.addEventListener('selectionchange', (e) => {
+      console.log(document.getSelection());
+    });
     // console.log(block);
     // block content
     switch (block.type) {
@@ -99,6 +102,10 @@ export class BlockManager {
       // this.editorInsertBlockEvent;
     });
 
+    document.addEventListener('selectionchange', (e) => {
+      console.log('container selection');
+      this.toolbar.move();
+    });
     // this.editorInsertBlockEvent();
 
     ['focus', 'click', 'keydown'].forEach((evKey) => {

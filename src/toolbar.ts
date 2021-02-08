@@ -1,3 +1,5 @@
+import { SelectionUtil } from './selection';
+
 export class Toolbar {
   private editor: HTMLDivElement;
   private toolbar_css = 'editoro-toolbar';
@@ -86,6 +88,48 @@ export class Toolbar {
         this.toolbar.appendChild(sub);
       }
     });
+  }
+
+  /**
+   * Move Toolbar to the selected text
+   */
+  public move(): void {
+    const selectionRect = SelectionUtil.rect as DOMRect;
+    console.log(selectionRect);
+    // const wrapperOffset = this.Editor.UI.nodes.wrapper.getBoundingClientRect();
+    // const newCoords = {
+    //   x: selectionRect.x - wrapperOffset.left,
+    //   y:
+    //     selectionRect.y +
+    //     selectionRect.height -
+    //     // + window.scrollY
+    //     wrapperOffset.top +
+    //     this.toolbarVerticalMargin,
+    // };
+
+    // /**
+    //  * If we know selections width, place InlineToolbar to center
+    //  */
+    // if (selectionRect.width) {
+    //   newCoords.x += Math.floor(selectionRect.width / 2);
+    // }
+
+    // /**
+    //  * Inline Toolbar has -50% translateX, so we need to check real coords to prevent overflowing
+    //  */
+    // const realLeftCoord = newCoords.x - this.width / 2;
+    // const realRightCoord = newCoords.x + this.width / 2;
+
+    // /**
+    //  * By default, Inline Toolbar has top-corner at the center
+    //  * We are adding a modifiers for to move corner to the left or right
+    //  */
+    // this.nodes.wrapper.classList.toggle(this.CSS.inlineToolbarLeftOriented, realLeftCoord < this.Editor.UI.contentRect.left);
+
+    // this.nodes.wrapper.classList.toggle(this.CSS.inlineToolbarRightOriented, realRightCoord > this.Editor.UI.contentRect.right);
+
+    // this.nodes.wrapper.style.left = Math.floor(newCoords.x) + 'px';
+    // this.nodes.wrapper.style.top = Math.floor(newCoords.y) + 'px';
   }
 
   runCommand(cmd: string) {
